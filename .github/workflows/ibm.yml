@@ -2,12 +2,14 @@ name: IBM Cloud Auto Restart
 
 on:
   push:
-    branches: [ master ]
+    branches: [ dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ dev ]
   schedule:
-    - cron: '15 20 * * *'
-
+    - cron: '0 12 * * FRI'
+  watch:
+    types: started
+    
 jobs:
   ibm-cloud-restart:
     runs-on: ubuntu-latest
@@ -34,7 +36,7 @@ jobs:
       run: |
         ./IBM_Cloud_CLI/ibmcloud target -g "$RESOURSE_ID"
         ./IBM_Cloud_CLI/ibmcloud target --cf
-        ./IBM_Cloud_CLI/ibmcloud cf install
+        ./IBM_Cloud_CLI/ibmcloud cf install  -v 6.51.0
     - name: Restart IBM Cloud
       env:
         IBM_APP_NAME: ${{ secrets.IBM_APP_NAME }}
